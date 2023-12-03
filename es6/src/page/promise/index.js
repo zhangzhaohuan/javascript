@@ -1,62 +1,29 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import { Route, BrowserRouter as Router, Switch, Link } from "react-router-dom";
+import Demo2 from './demo2'
+import Demo1 from './demo1'
 
 export default class PromiseDemo extends Component {
-
-
-    componentDidMount(){
-       console.log('------1 start------');
-       function timeout(ms) {
-        return new Promise((resolve, reject) => {
-          setTimeout(resolve, ms, 'done');
-        });
-      }
-      timeout(100).then((value) => {
-        console.log(value);
-      });
-      console.log('------1-end------');
-
-      console.log('------2 start------');
-      // p2依赖p1的状态
-      // p4依赖p3的状态
-      const p1 = new Promise(function (resolve, reject) {
-        setTimeout(() => reject(new Error('fail')), 1000)
-      })
-
-      const p2 = new Promise(function (resolve, reject) {
-        setTimeout(() => resolve(p1), 1000)
-      })
-      console.log('p1:');
-      console.log(p1);
-      console.log('p2:');
-      console.log(p2);
-      p2.then(result => console.log(result))
-      .catch(error => console.log(error))
-
-      const p3 = new Promise(function (resolve, reject) {
-        setTimeout(() => resolve('success'), 3000)
-      })
-
-      const p4 = new Promise(function (resolve, reject) {
-        setTimeout(() => resolve(p3), 1000)
-      })
-      console.log(p3);
-      console.log(p4);
-      p3.then(result => console.log(result))
-      .catch(error => console.log(error))
-
-      p4.then(result => {console.log(result); return result })
-      .then(result =>{console.log(result);})
-      .catch(error => console.log(error))
-      console.log('------2 end------');
-
-
-
-    }
-    render() {
-        return (
-            <div>
-                PromiseDemo
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <ul>
+          <li>
+            <Link to="/promise">
+              Promise在事件循环中的执行过程是怎样的
+            </Link>
+          </li>
+          <li>
+            <Link to="/promise/demo2">手写promise</Link>
+          </li>
+        </ul>
+        <div>
+          <Switch>
+            <Route path="/promise/demo2" component={Demo2} />
+            <Route path="/promise" component={Demo1} />
+          </Switch>
+        </div>
+      </div>
+    );
+  }
 }

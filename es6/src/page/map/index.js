@@ -4,7 +4,7 @@ export default class MapDom extends Component {
 
 
     componentDidMount(){
-
+let aa ;console.log(aa);
         console.log('=========Set start============');
         
         let set = new Set(['red', 'green', 'blue']);
