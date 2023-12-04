@@ -2,6 +2,7 @@ import React,{ Component } from "react";
 
 export default class Demo1 extends Component {
   componentDidMount() {
+    console.log('git reset test1');
     console.log("------1 start------");
     function timeout(ms) {
       return new Promise((resolve, reject) => {
