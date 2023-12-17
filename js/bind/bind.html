@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写bind</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * !!!详细请看张兆欢简书：https://www.jianshu.com/p/f4d50fa857ef
+       * **/
+      // 完整版
+      Function.prototype.myBind = function (context) {
+        // this异常处理
+        if (typeof this !== "function") {
+          throw new Error(
+            "Function.prototype.bind - what is trying to be bound is not callable"
+          );
+        }
+        var fn = this;
+        // 获取函数参数：从第2个到最后一个
+        var args = Array.prototype.slice.call(arguments, 1);
+        var fNOP = function () {};
+        var fBound = function () {
+          // 这个时候的arguments是指bind返回的函数传入的参数
+          var bindArgs = Array.prototype.slice.call(arguments);
+          // 当作为构造函数时，this 指向实例，此时结果为 true，将绑定函数的 this 指向该实例，可以让实例获得来自绑定函数的值
+          // 以上面的是 demo 为例，如果改成 `this instanceof fBound ? null : context`，实例只是一个空对象，将 null 改成 实例 ，实例会具有 habit 属性
+          // 当作为普通函数时，this 指向 window，此时结果为 false，将绑定函数的 this 指向 context
+          fn.apply(
+            this instanceof fBound ? new fn(...arguments) : context,
+            args.concat(bindArgs)
+          );
+        };
+        // 修改返回函数的 prototype 为绑定函数的 prototype，实例就可以继承绑定函数的原型中的值，
+        // 防止原型链的污染，用实例转化一下
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+        return fBound;
+      };
+
+      /***
+       * 测试用例
+       *
+       * ***/
+      var foo = {
+        value: 1,
+      };
+      function bar(name, age) {
+        this.habit = "sleep";
+        this.name = name;
+        this.age = age;
+      }
+      bar.prototype.friend = "王五";
+
+      var bindFoo = bar.bind(foo, "张三");
+
+      var obj = new bindFoo("18");
+
+      /**
+       * 分步骤实现myBind
+       * step1: 返回函数
+       * step2: 传递参数
+       * step3: 构造函数的处理
+       * step4: 防止原型链的污染、this异常处理
+       * ****/
+
+      // step1: 返回函数
+      Function.prototype.myBind = function (context) {
+        var fn = this;
+        return function () {
+          fn.apply(context);
+        };
+      };
+
+      // step2: 传递参数
+      Function.prototype.myBind = function (context) {
+        var fn = this;
+        // 获取函数参数：从第2个到最后一个
+        var args = Array.prototype.slice.call(arguments, 1);
+        return function () {
+          // 这个时候的arguments是指bind返回的函数传入的参数
+          var bindArgs = Array.prototype.slice.call(arguments);
+          fn.apply(context, args.concat(bindArgs));
+        };
+      };
+
+      // step3:构造函数的处理
+      Function.prototype.myBind = function (context) {
+        var fn = this;
+        // 获取函数参数：从第2个到最后一个
+        var args = Array.prototype.slice.call(arguments, 1);
+        var fBound = function () {
+          // 这个时候的arguments是指bind返回的函数传入的参数
+          var bindArgs = Array.prototype.slice.call(arguments);
+          // 当作为构造函数时，this 指向实例，此时结果为 true，将绑定函数的 this 指向该实例，可以让实例获得来自绑定函数的值
+          // 以上面的是 demo 为例，如果改成 `this instanceof fBound ? null : context`，实例只是一个空对象，将 null 改成 实例 ，实例会具有 habit 属性
+          // 当作为普通函数时，this 指向 window，此时结果为 false，将绑定函数的 this 指向 context
+          fn.apply(
+            this instanceof fBound ? new fn(...arguments) : context,
+            args.concat(bindArgs)
+          );
+        };
+        // 修改返回函数的 prototype 为绑定函数的 prototype，实例就可以继承绑定函数的原型中的值
+        fBound.prototype = this.prototype;
+        return fBound;
+      };
+
+      /**
+       * step4:防止原型链的污染、this异常处理
+       * 防止原型链的污染 分析:我们直接将 fBound.prototype = this.prototype,直接修改 fBound.prototype 的时候，也会直接修改绑定函数的 prototype.可以用一个函数实例转化一下。
+       * this异常处理
+       * ****/
+      Function.prototype.myBind = function (context) {
+        // this异常处理
+        if (typeof this !== "function") {
+          throw new Error(
+            "Function.prototype.bind - what is trying to be bound is not callable"
+          );
+        }
+        var fn = this;
+        var args = Array.prototype.slice.call(arguments, 1);
+        function fNOP() {}
+        var fBound = function () {
+          var bindArgs = Array.prototype.slice.call(arguments);
+          // 当作为构造函数时，this 指向实例，此时结果为 true，将绑定函数的 this 指向该实例，可以让实例获得来自绑定函数的值
+          // 以上面的是 demo 为例，如果改成 `this instanceof fBound ? null : context`，实例只是一个空对象，将 null 改成 实例 ，实例会具有 habit 属性
+          // 当作为普通函数时，this 指向 window，此时结果为 false，将绑定函数的 this 指向 context
+          fn.apply(
+            this instanceof fBound ? new fn(...arguments) : context,
+            args.concat(bindArgs)
+          );
+        };
+        // 修改返回函数的 prototype 为绑定函数的 prototype，实例就可以继承绑定函数的原型中的值
+        // 防止原型链的污染，用实例转化一下
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+        return fBound;
+      };
+    </script>
+  </body>
+</html>

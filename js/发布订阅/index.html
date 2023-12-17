@@ -26,7 +26,7 @@
       };
       remove(eventName,cb){
         if (this.events[eventName]) {
-          this.events[eventName] = this.events[eventName].filter(f => f != callback)
+          this.events[eventName] = this.events[eventName].filter(f => f != cb)
         } 
       };
     }

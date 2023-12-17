@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="element1">Event & dispatchEvent</div>
+    <div class="element2">CustomEvent & dispatchEvent</div>
+  </body>
+  <script>
+    /**
+     * dispatch使用方法
+     * 1.先通过new Event() | CustomEvent构造函数创建事件
+     * 2.dispatchEvent()调用: 同步调用事件处理函数
+     * **/
+    window.addEventListener("load", () => {
+      // Event &  dispatchEvent
+      const ele1 = document.querySelector(".element1");
+      const event = new Event("build");
+
+      ele1.addEventListener("build", () => {
+        console.log("1111"); //触发
+      });
+      ele1.addEventListener("build", () => {
+        console.log("2222"); //触发
+      });
+      ele1.dispatchEvent(event);
+
+      //  CustomEvent & dispatchEvent
+      // detail为固定属性用于传递自定义数据
+      const customEvent = new CustomEvent("customEvent1", { detail: "Bob" });
+      const ele2 = document.querySelector(".element2");
+
+      ele2.addEventListener("customEvent1", (e) => {
+        console.log(e.detail); //触发
+      });
+      ele2.addEventListener("customEvent1", (e) => {
+        console.log(e.detail); //触发
+      });
+      ele2.dispatchEvent(customEvent);
+    });
+  </script>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lodash.deepClone测试常规嵌套json</title>
+  </head>
+  <script src="./lodash.clonedeep.js"></script>
+  <body>
+    <script>
+      // 测试用例 循环引用
+      var objA = {
+        name:'a'
+      };
+      var objB = {
+        name:'b'
+      };
+      objA.prop = objB;
+      objB.prop = objA;
+
+      console.log(cloneDeep(objA))
+
+
+    </script>
+  </body>
+</html>

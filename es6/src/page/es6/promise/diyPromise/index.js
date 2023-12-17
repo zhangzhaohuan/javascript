@@ -1,5 +1,6 @@
 /**
  * 参考资料：https://zhuanlan.zhihu.com/p/183801144
+ * 手写promise完整版
  */
 
 const PENDING = 'PENDING';

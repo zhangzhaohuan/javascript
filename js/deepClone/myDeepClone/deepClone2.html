@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>deepClone 手动实现</title>
+  </head>
+  <body>
+    <script>
+      function getType(obj) {
+        let map = {
+          "[object Boolean]": "boolean",
+          "[object Number]": "number",
+          "[object String]": "string",
+          "[object Function]": "function",
+          "[object Array]": "array",
+          "[object Date]": "date",
+          "[object RegExp]": "regExp",
+          "[object Undefined]": "undefined",
+          "[object Null]": "null",
+          "[object Object]": "object",
+        };
+        if (obj instanceof Element) {
+          return "element";
+        }
+        return map[Object.prototype.toString.call(obj)];
+      }
+
+      function deepClone(target,stack) {
+        const type = getType(target);
+        if (type == "array" || type == "object") {
+          let _clone;
+          if(type == "array")  _clone = [];
+          if(type == "object") _clone = {};
+          // 检查循环引用并返回其对应的克隆
+          stack || (stack = new WeakMap());
+          var stacked = stack.get(target);
+          if (stacked) {
+            return stacked;
+          }
+          stack.set(target, _clone);
+          // 复杂数据类型 递归实现
+          if (type == "array") {
+            target.forEach((element) => {
+              _clone.push(deepClone(element, stack));
+            });
+          } else {
+            for (const key in target) {
+              if (Object.hasOwnProperty.call(target, key)) {
+                const element = target[key];
+                _clone[key] = deepClone(element, stack);
+              }
+            }
+          }
+          return _clone;
+        } else {
+          // 基础数据类型 直接返回
+          return target;
+        }
+      }
+
+      // 测试用例1 ✅
+      let test1 = {
+        name: "zhangsan",
+        age: 11,
+      };
+      // console.log(deepClone(test1));
+
+      // 测试用例2 ✅
+      let test2 = [
+        {
+          name: "bob",
+          age: 11,
+        },
+        {
+          box: {
+            name: "bbbbb",
+            age: 12,
+          },
+        },
+      ];
+      // console.log(deepClone(test2));
+
+      // 测试用例3 循环引用 
+      var objA = {
+        name:'a'
+      };
+      var objB = {
+        name:'b'
+      };
+      objA.prop = objB;
+      objB.prop = objA;
+
+      console.log(deepClone(objA))
+    </script>
+  </body>
+</html>

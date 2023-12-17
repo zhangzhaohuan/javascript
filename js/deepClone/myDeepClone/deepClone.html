@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>deepClone 手动实现</title>
+  </head>
+  <body>
+    <script>
+      function getType(obj) {
+        let map = {
+          "[object Boolean]": "boolean",
+          "[object Number]": "number",
+          "[object String]": "string",
+          "[object Function]": "function",
+          "[object Array]": "array",
+          "[object Date]": "date",
+          "[object RegExp]": "regExp",
+          "[object Undefined]": "undefined",
+          "[object Null]": "null",
+          "[object Object]": "object",
+        };
+        if (obj instanceof Element) {
+          return "element";
+        }
+        return map[Object.prototype.toString.call(obj)];
+      }
+
+      function deepClone(target) {
+        const type = getType(target);
+        /**
+         * todo 循环引用
+        */
+        if (type == "array" || type == "object") {
+          let _clone;
+          // 复杂数据类型 递归实现
+          if (type == "array") {
+            _clone = [];
+            target.forEach((element) => {
+              _clone.push(deepClone(element));
+            });
+          } else {
+            _clone = {};
+            for (const key in target) {
+              if (Object.hasOwnProperty.call(target, key)) {
+                const element = target[key];
+                _clone[key] = deepClone(element);
+              }
+            }
+          }
+          return _clone;
+        } else {
+          // 基础数据类型 直接返回
+          return target;
+        }
+      }
+
+
+
+      // 测试用例1
+      let test1 = {
+        name:'zhangsan',
+        age:11
+      }
+      // console.log(deepClone(test1));
+
+
+      // 测试用例2
+      let test2 = [
+        {
+          name:'bob',
+          age:11
+        },
+        {
+          box:{
+            name:'bbbbb',
+            age:12
+          }
+        }
+      ]
+      // console.log(deepClone(test2));
+
+      // 测试用例3 循环引用 ❌ 栈溢出
+      var objA = {
+        name:'a'
+      };
+      var objB = {
+        name:'b'
+      };
+      objA.prop = objB;
+      objB.prop = objA;
+
+      // console.log(deepClone(objA))
+    </script>
+  </body>
+</html>

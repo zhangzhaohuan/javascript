@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lodash.deepClone测试常规嵌套json</title>
+  </head>
+  <script src="./lodash.clonedeep.js"></script>
+  <script src="data.json" type="application/json"></script>
+  <body>
+    <script>
+      // 测试用例5 复制常规嵌套json
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "data.json", true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var test5 = JSON.parse(xhr.responseText);
+          
+          var data5 = cloneDeep(test5);
+          console.log(data5);
+        }
+      };
+      xhr.send();
+    </script>
+  </body>
+</html>

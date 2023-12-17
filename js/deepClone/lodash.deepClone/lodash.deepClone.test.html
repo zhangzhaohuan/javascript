@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lodash.deepClone测试</title>
+  </head>
+  <script src="./lodash.clonedeep.js"></script>
+  <body>
+    <script>
+      // 测试用例4 复制对象方法
+      var test4 = {
+        aaaa: function aaa() {
+          let ssss = "name";
+          return ssss;
+        },
+      };
+      var data4 = cloneDeep(test4);
+      console.log(data4);
+
+      // 测试用例3 复制函数:返回{}
+      var test3 = function aaa() {
+        let ssss = "name";
+        return ssss;
+      };
+      var data3 = cloneDeep(test3);
+      console.log(data3); // ===> {}
+
+      // 测试用例1 复制基础symbol
+      var test1 = Symbol("first symbol");
+      var data1 = cloneDeep(test1);
+      console.log(data1);
+
+      // 测试用例2 复制嵌套的symbol
+      var test2 = Symbol("second symbol");
+      var obj2 = {
+        name: "bob",
+        value: test2,
+      };
+      var data2 = cloneDeep(obj2);
+      console.log(data2);
+    </script>
+  </body>
+</html>
