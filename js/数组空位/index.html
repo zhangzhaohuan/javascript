@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数组空位</title>
+</head>
+<body>
+  一、数组空位与undefined
+
+  　　　　数组空位：数组的某一个位置没有任何值
+  
+  　　　　产生空位的原因：数组中两个逗号之间不放任何值；用new Array()的方法，参数里是个数字；通过一个不存在的下标去增加数组；增加数组length属性的值。
+  
+  　　　　空位的特点：
+  
+  　　　　　　　　1. 空位也是数组的数据；
+  
+  　　　　　　　　2. 空位在读取的时候为undefined; 如果数组最后一个数据有逗号，并不会产生空位（非ie6,7,8）,应该尽量避免在后面加上逗号；
+  
+  　　　　　　　　3. 数组的空位与某个位置为undefined是不一样的（在循环的时候）
+  
+  　　　　　　　　　　a. for，for...of循环会把空位处理成undefined
+  
+  　　　　　　　　　　b.entries,keys,values,find,findIndex会将空位处理成undefined
+  
+  　　　　　　　　　　c. for...in,forEach,map,filter,Object.keys(),every,some都会忽略空位
+  
+  　　　　　注意：数组的一些方法对于空位的处理是不一样的，所以数组里最好不要出现空位，或者用undefined。es6中则是明确将空位转为undefined。
+
+
+
+
+
+  <script>
+    let color = ['red', , 'blue', undefined];
+
+    　　　　　//空位转成undefined
+        for (var i = 0; i < color.length; i++) {
+            console.log('key,' + i + ',value,' + color[i]);   
+            //key,0,value,red
+            //key,1,value,undefined
+            //43 key,2,value,blue
+            //43 key,3,value,undefined
+        }
+
+
+        　　　　　　//忽略空位
+        for (var attr in color) {
+            console.log('key,' + attr + ',value,' + color[i]); 
+            //key,0,value,undefined
+            //key,2,value,undefined
+            //key,3,value,undefined
+        }
+
+
+  </script>
+</body>
+</html>
