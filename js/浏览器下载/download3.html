@@ -1,7 +1,10 @@
 <!doctype html>
 <html>
 
-<head></head>
+<head>
+  <title>下载CSV</title>
+
+</head>
 
 <body>
 
@@ -71,7 +74,7 @@
         csv = 'data:text/csv;charset=utf-8,' + csv;
       }
       data = encodeURI(csv);
-
+      console.log(data);
       link = document.createElement('a');
       link.setAttribute('href', data);
       link.setAttribute('download', filename);
