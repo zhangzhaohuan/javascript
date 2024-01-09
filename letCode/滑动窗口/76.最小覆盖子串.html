@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 参考资料：https://leetcode.cn/problems/minimum-window-substring/
+       * 
+       * 滑动窗口的思想：
+        用i,j表示滑动窗口的左边界和右边界，通过改变i,j来扩展和收缩滑动窗口，可以想象成一个窗口在字符串上游走，当这个窗口包含的元素满足条件，即包含字符串T的所有元素，记录下这个滑动窗口的长度j-i+1，这些长度中的最小值就是要求的结果。
+       * 
+       * 步骤一
+       * 不断增加j使滑动窗口增大，直到窗口包含了T的所有元素
+       * 
+       * 步骤二
+       * 不断增加i使滑动窗口缩小，因为是要求最小字串，所以将不必要的元素排除在外，使长度减小，直到碰到一个必须包含的元素，这个时候不能再扔了，再扔就不满足条件了，记录此时滑动窗口的长度，并保存最小值
+       * 
+       * 步骤三
+       * 让i再增加一个位置，这个时候滑动窗口肯定不满足条件了，那么继续从步骤一开始执行，寻找新的满足条件的滑动窗口，如此反复，直到j超出了字符串S范围。
+       * 
+       * 面临的问题：
+       *  1.如何判断滑动窗口包含了T的所有元素？
+       * 
+       * 
+       * @param {string} s
+       * @param {string} t
+       * @return {string}
+       */
+      var minWindow = function (s, t) {
+        if (!s) return "";
+        if (s.length == 1) {
+          return s == t ? s : "";
+        }
+
+        const map = new Map();
+        let left = 0;
+        let right = 0;
+        let min;
+        let result = "";
+        const need = new Map();
+        let needCnt = t.length; //优化作用：减少遍历need
+
+        for (i = 0; i < t.length; i++) {
+          need.set(t.charAt(i), (need.get(t.charAt(i)) || 0) + 1); //需要
+        }
+        for (right = 0; right < s.length; right++) {
+          const code = s.charAt(right);
+
+          // need的值减去1
+          let number = (need.get(code) || 0) - 1;
+          need.set(code, number);
+          if (number >= 0) needCnt--;
+
+          // needCont==0 时，窗口包含所有元素。然后开始优化左边
+          if (needCnt == 0) {
+            for (; left < right; left++) {
+              const code = s.charAt(left);
+              // 遇到必须需要的值，记录长度更新结果
+              if (need.get(code) >= 0) {
+                if (result) {
+                  // 非初次
+                  if (min > right - left + 1) {
+                    min = right - left + 1;
+                    result = s.slice(left, right + 1);
+                  }
+                } else {
+                  // 初次
+                  min = right - left + 1;
+                  result = s.slice(left, right + 1);
+                }
+
+                // left左移及相关变化
+                need.set(code, need.get(code) + 1);
+                if (need.get(code) > 0) {
+                  needCnt++;
+                }
+                left++;
+                break;
+                // return result
+              }
+              need.set(code, need.get(code) + 1);
+            }
+          }
+        }
+        return result;
+      };
+
+      // test
+
+      s = "abcdefghijklmn";
+      t = "deff";
+      log = minWindow(s, t);
+      console.log(log);
+    </script>
+  </body>
+</html>

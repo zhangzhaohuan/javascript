@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>13. 罗马数字转整数</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * [方法一：正则转换替换6中特殊场景]
+       * @param {string} s
+       * @return {number}
+       */
+      var romanToInt1 = function (s) {
+        const map = {
+          I: 1,
+          V: 5,
+          X: 10,
+          L: 50,
+          C: 100,
+          D: 500,
+          M: 1000,
+        };
+        // 特殊处理六中情况
+        transform = /((IV)|(IX)|(XL)|(XC)|(CD)|(CM))+/.test(s);
+        if (transform) {
+          s = s
+            .replace(/(IV)/g, "IIII")
+            .replace(/(IX)/g, "VIIII")
+            .replace(/(XL)/g, "XXXX")
+            .replace(/(XC)/g, "LXXXX")
+            .replace(/(CD)/g, "CCCC")
+            .replace(/(CM)/g, "DCCCC");
+        }
+        let sum = 0;
+        for (let i = 0; i < s.length; i++) {
+          const element = s[i];
+          sum = sum + map[element];
+        }
+        return sum;
+      };
+
+
+
+      var romanToInt = function (s) {
+        const map = {
+          I: 1,
+          V: 5,
+          X: 10,
+          L: 50,
+          C: 100,
+          D: 500,
+          M: 1000,
+        };
+        let sum = 0;
+        for (let i = 0; i < s.length; i++) {
+          const value = map[s[i]];
+          if (
+            ["I", "X", "C"].includes(s[i]) &&
+            i < s.length - 1 &&
+            value < map[s[i + 1]]
+          ) {
+            sum = sum - value;
+          }else{
+            sum = sum + value;
+          }
+        }
+        return sum;
+      };
+
+      // test
+      console.log(romanToInt("II"));
+      console.log(romanToInt("XII"));
+      console.log(romanToInt("XXVII"));
+      console.log(romanToInt("IV"));
+      console.log(romanToInt("XL"));
+      console.log(romanToInt("XC"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>9.回文数</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 方法1：转字符串
+       * @param {number} n
+       * @return {boolean}
+       */
+      function check(n) {
+        const str = n + "";
+        const middle = str.length / 2;
+        for (let index = 0; index < middle; index++) {
+          if (str[index] != str[str.length - 1 - index]) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      // test
+      // console.log(check(12332111));
+
+      /**
+       * 进阶：你能不将整数转为字符串来解决这个问题吗？
+       * 方法二：反转一半的数字
+       *
+       * eg: 12345 ==》1234 5  ==》 123 54 ===》12 543
+       * ***/
+
+      function check2(n) {
+        // 负数、个位是0的数（非0） 不是回文数
+        if (n < 0) return false;
+        if (n != 0 && n % 10 == 0) return false;
+
+        //  12321    123  12   12 123
+        //  123321   1233 12   123 123
+        let reverse = 0;
+        while (n > reverse) {
+          // 取余 、整除10
+          reverse = reverse * 10 + (n % 10);
+
+          n = Math.floor(n / 10);
+        }
+
+        return 
+      }
+    </script>
+  </body>
+</html>

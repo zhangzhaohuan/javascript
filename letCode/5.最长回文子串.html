@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <script>
+    /**
+     * 参考资料：https://leetcode.cn/problems/longest-palindromic-substring/
+     * 方法一：
+     * 中心扩散法
+     *
+     * 解题思路: 回文子串长度两种情况：
+     * 1.奇数：如aba,中心为b
+     * 2.偶数：如abba,中心为b,b
+     *
+     *
+     *
+     * *****/
+
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    function longestPalindrome1(s) {
+      if (s.length <= 1) return s;
+
+      let result = "";
+      // 假设每一个数都可能是中心，则遍历字符串
+      for (let index = 0; index < s.length; index++) {
+        // 奇数
+        handle(index, index);
+        // 偶数
+        handle(index, index + 1);
+      }
+
+      function handle(left, right) {
+        while (left >= 0 && right < s.length && s[left] == s[right]) {
+          left--;
+          right++;
+        }
+
+        // 跳出while循环时 left和right是不符合条件的，
+        // 符合条件的是上次循环的值：left+1 right-1 ,
+        // 长度为 (right-1) - (left+1) + 1 = right -left -1
+        if (right - left - 1 > result.length) {
+          result = s.slice(left + 1, right);
+        }
+      }
+      return result;
+    }
+
+    // test
+
+    /**
+     * 参考资料：https://leetcode.cn/problems/longest-palindromic-substring/solutions/50780/5-zui-chang-hui-wen-zi-chuan-by-alexer-660/
+     * 暴力解法
+     *
+     * **/
+    function longestPalindrome(s) {
+      if (s.length < 2) return s;
+
+      function check(str) {
+        var len = str.length;
+        var middle = parseInt(len / 2);
+        for (var i = 0; i < middle; i++) {
+          if (str[i] != str[len - i - 1]) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      let result = "";
+      for (let i = 0; i < s.length; i++) {
+        const element = s[i];
+        for (let j = i + 1; j < s.length; j++) {
+          let tmpStr = s.slice(i, j+1);
+          if (check(tmpStr) && tmpStr.length > result.length) {
+            result = tmpStr;
+          }
+        }
+      }
+      return result;
+    }
+  </script>
+
+  <body>
+    <div>
+      <a
+        href="https://leetcode.cn/problems/add-two-numbers/solutions/1264418/liang-shu-xiang-jia-xian-du-ti-du-ti-fen-oda7/"
+        >5. 最长回文子串</a
+      >
+      <ul>
+        <li>
+          <a href="https://leetcode.cn/problems/longest-palindromic-substring/"
+            >中心扩散法</a
+          >
+        </li>
+        <li>
+          <a href="https://leetcode.cn/problems/longest-palindromic-substring/solutions/50780/5-zui-chang-hui-wen-zi-chuan-by-alexer-660/"
+            >暴力解法</a
+          >
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

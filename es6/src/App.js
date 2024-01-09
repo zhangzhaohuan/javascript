@@ -10,6 +10,7 @@ import ReducePage from "./page/es6/reduce";
 import PromiseDemo from "./page/es6/promise";
 import ReflectDemo from "./page/es6/reflect";
 
+
 class App extends Component {
   render() {
     return (
@@ -31,27 +32,12 @@ class App extends Component {
                 <Link to="/reflect">reflect</Link>
               </li>
             </ul>
-            <h3>js</h3>
-            <ul>
-              <li>
-                <Link to="/bind">bind 、call、apply区别及实现</Link>
-              </li>
-            </ul>
-            <h3>Web API 接口参考</h3>
-            <ul>
-              <li>
-                <Link to="/eventTarget">eventTarget</Link>
-              </li>
-            </ul>
+
             <Switch>
               <Route path="/map" component={MapPage} />
               <Route path="/reduce" component={ReducePage} />
               <Route path="/promise" component={PromiseDemo} />
               <Route path="/reflect" component={ReflectDemo} />
-              <Route path="/bind" component={BindDemo} />
-              <Route path="/eventTarget" component={EventTargetDemo} />
-
-
               <Route path="/" component={Home} />
             </Switch>
           </div>

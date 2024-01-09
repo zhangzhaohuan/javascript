@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>两数相加</title>
-</head>
-<body>
-  
-</body>
-<script>
-/*
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>两数相加</title>
+  </head>
+  <body>
+    <div>
+      <a>
+        https://leetcode.cn/problems/add-two-numbers/solutions/1264418/liang-shu-xiang-jia-xian-du-ti-du-ti-fen-oda7/
+      </a>
+    </div>
+  </body>
+  <script>
+    // 参考资料：
+
+    /*
 * 
 题干：给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
 请你将两个数相加，并以相同形式返回一个表示和的链表。
@@ -32,34 +38,115 @@
 输出：[8,9,9,9,0,0,0,1]
 */
 
-/*
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- * 
- * @param {ListNode} l1
- * @param {ListNode} l2
- * @return {ListNode}
-*/
+    /*
+     * function ListNode(val) {
+     *     this.val = val;
+     *     this.next = null;
+     * }
+     *
+     * @param {ListNode} l1
+     * @param {ListNode} l2
+     * @return {ListNode}
+     */
 
+    /***
+     * 倒序:[4,3,2] ==> new ListNode(2,new ListNode(3, new ListNode(4)))
+     *
+     * 正序:[4,3,2] ==> new ListNode(4,new ListNode(3, new ListNode(2)))
+     *
+     * **/
 
+    function ListNode(val, next) {
+      this.val = val === undefined ? 0 : val;
+      this.next = next === undefined ? null : next;
+    }
 
-// var addTwoNumbers = function(l1, l2) {
-//     const arr1 = l1.reverse();
-//     const arr2 = l2.reverse();
-//     const str1 = arr1.join("");
-//     const str2 = arr2.join("");
-//     const num1 = parseInt(str1);
-//     const num2 = parseInt(str2);
-//     const result = num1 + num2;
-//     const resultStr = String(result);
-//     const resultArr = resultStr.split('');
-//     return resultArr
-// };
+    // 倒序:[4,3,2] ==> new ListNode(2,new ListNode(3, new ListNode(4)))
+    // 方法1
+    function makeListNodeReverse(arr) {
+      let list = null;
+      arr.forEach((element) => {
+        if (!list) {
+          list = new ListNode(element);
+        } else {
+          list = new ListNode(element, list);
+        }
+      });
+      return list;
+    }
 
-// addTwoNumbers([1,2,4],[4,3,1])
+    // 倒序:[4,3,2] ==> new ListNode(2,new ListNode(3, new ListNode(4)))
+    // 方法2
+    function makeListNodeReverseByReduce(arr) {
+      return arr.reduce((ac, item) => new ListNode(item, ac), null);
+    }
 
+    // 正序:[4,3,2] ==> new ListNode(4,new ListNode(3, new ListNode(2)))
+    // 方法1
+    function makeListNode(arr) {
+      let head = null;
+      arr.forEach((element) => {
+        if (!head) {
+          head = tail = new ListNode(element);
+        } else {
+          tail.next = new ListNode(element);
+          tail = tail.next;
+        }
+      });
+      return head;
+    }
+    // 正序:[4,3,2] ==> new ListNode(4,new ListNode(3, new ListNode(2)))
+    // 方法2
+    function makeListNodebyReduce(arr) {
+      return arr.reduceRight((ac, item) => new ListNode(item, ac), null);
+    }
 
-</script>
+    /***
+     * 倒叙[a,b,c] ==> c(b(a()))
+     * ***/
+    function composeReverse(arr) {
+      let result;
+      for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+        if (index == 0) {
+          result = element();
+        } else {
+          result = element(result);
+        }
+      }
+      return result;
+    }
+
+    var addTwoNumbers = function (l1, l2) {
+      if (!l1 && !l2) return null;
+      let head = null; // 链表头
+      let tail = null; // 当前链表位置
+      let carry = 0; // 存放进位
+      let sum = 0;
+      while (l1 || l2) {
+        const n1 = l1 ? l1.val : 0;
+        const n2 = l2 ? l2.val : 0;
+        sum = n1 + n2 + carry;
+        carry = sum >= 10 ? 1 : 0;
+        if (!head) {
+          head = tail = new ListNode(sum % 10);
+        } else {
+          // 正序
+          tail.next = new ListNode(sum % 10);
+          // 更新链表位置(指针++)
+          tail = tail.next;
+        }
+        // 更新链表位置(指针++)
+        if (l1) {
+          l1 = l1.next;
+        }
+        if (l2) {
+          l2 = l2.next;
+        }
+      }
+      // 存在进位 则链表下一项进一位
+      if (carry) tail.next = new ListNode(1);
+      return head;
+    };
+  </script>
 </html>

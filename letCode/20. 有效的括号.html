@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>20. 有效的括号</title>
+  </head>
+  <body>
+    <script>
+
+
+      
+
+      /**
+       *
+       * 思路：栈
+       * 如果是左括号则直接入栈; 
+       * 如果是右括号则要匹配栈中最后一个并消除
+       * 
+       * @param {string} s
+       * @return {boolean}
+       */
+      var isValid = function (s) {
+        const map = {
+          "(": ")",
+          "{": "}",
+          "[": "]",
+        };
+        const leftCodes = ["(","{","["];
+        const stack = []; // 后进先出
+        for (let i = 0; i < s.length; i++) {
+           const code = s[i];
+          if(leftCodes.includes(s[i])){
+            stack.push(s[i])
+          }else{
+            const last = stack.pop();
+            if(map[last]!=code)return false;
+          }
+          if(i==s.length-1&&stack.length>0)return false;
+        }
+        return true;
+      };
+
+      console.log(isValid("([)]"));
+      console.log(isValid("()[]"));
+    </script>
+  </body>
+</html>
